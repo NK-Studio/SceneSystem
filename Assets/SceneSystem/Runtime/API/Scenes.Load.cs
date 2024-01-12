@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using AnnulusGames.SceneSystem.LoadSceneOperations;
+using UnityEngine;
 
 namespace AnnulusGames.SceneSystem
 {
@@ -23,7 +24,7 @@ namespace AnnulusGames.SceneSystem
 
         public static LoadSceneOperationHandle LoadSceneAsync(SceneReference sceneReference, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            return Loader.LoadAsync(sceneReference.assetPath, loadSceneMode);
+            return Loader.LoadAsync(sceneReference.Path, loadSceneMode);
         }
 
         public static LoadSceneOperationHandle LoadScenesAsync(params int[] sceneBuildIndexes)
@@ -101,7 +102,7 @@ namespace AnnulusGames.SceneSystem
             operationListCache.Clear();
             foreach (var reference in sceneReferences)
             {
-                operationListCache.Add(Loader.GetLoadSceneOperation(reference.assetPath, LoadSceneMode.Additive));
+                operationListCache.Add(Loader.GetLoadSceneOperation(reference.Path, LoadSceneMode.Additive));
             }
 
             switch (multiLoadSceneMode)
@@ -127,7 +128,7 @@ namespace AnnulusGames.SceneSystem
 
         public static LoadSceneOperationHandle UnloadSceneAsync(SceneReference sceneReference)
         {
-            return Loader.UnloadAsync(sceneReference.assetPath);
+            return Loader.UnloadAsync(sceneReference.Path);
         }
 
 
@@ -192,7 +193,7 @@ namespace AnnulusGames.SceneSystem
 
         public static void LoadScene(SceneReference sceneReference, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            Loader.Load(sceneReference.assetPath, loadSceneMode);
+            Loader.Load(sceneReference.Path, loadSceneMode);
         }
 
         public static void LoadScene(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
@@ -208,7 +209,7 @@ namespace AnnulusGames.SceneSystem
 
         public static void UnloadScene(SceneReference sceneReference)
         {
-            Loader.Unload(sceneReference.assetPath);
+            Loader.Unload(sceneReference.Path);
         }
 
         public static void UnloadScene(int sceneBuildIndex)

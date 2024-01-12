@@ -14,10 +14,10 @@ namespace AnnulusGames.SceneSystem
         public LoadingActionSkipMode skipMode;
 
         [Range(0f, 10f)] 
-        [Tooltip("During the Minimum Loading Time, the loading screen will continue to be displayed even after loading is completed.")]
+        [Tooltip("최소 로딩 시간 동안에는 로딩이 완료된 후에도 로딩 화면이 계속 표시됩니다.")]
         public float minimumLoadingTime;
         
-        [Tooltip("If true, the object will be automatically destroyed upon completion.")]
+        [Tooltip("true인 경우, 완료 시 자동으로 삭제됩니다.")]
         public bool destroyOnCompleted;
 
         [Header("Events")]
