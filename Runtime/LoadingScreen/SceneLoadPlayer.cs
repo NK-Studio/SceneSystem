@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace UnityEngine.SceneSystem
 {
-    [AddComponentMenu("Scene System/Loading Scene Player")]
+    [AddComponentMenu("Scene System/Scene Load Player")]
     public class SceneLoadPlayer : MonoBehaviour
     {
         /// <summary>
