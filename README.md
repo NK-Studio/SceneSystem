@@ -28,7 +28,7 @@ This library includes an API for loading scenes and a function that enables scen
 1. Open the Package Manager from Window > Package Manager
 2. "+" button > Add package from git URL
 3. Enter the following to install
-   * https://github.com/AnnulusGames/SceneSystem.git?path=/Assets/SceneSystem
+   * https://github.com/NK-Studio/SceneSystem.git?path=/Assets/SceneSystem
 
 
 or open Packages/manifest.json and add the following to the dependencies block.
