@@ -23,6 +23,7 @@ This library includes an API for loading scenes and a function that enables scen
 
 ### Requirement
 * Unity 2021.3 or higher
+* Scene Reference `https://github.com/NK-Studio/SceneReference.git#UPM`
 
 ### Install
 1. Open the Package Manager from Window > Package Manager
