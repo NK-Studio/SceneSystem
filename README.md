@@ -1,7 +1,7 @@
 # Scene System
  Provides efficient and versatile scene management functionality for Unity.
 
-<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Assets/SceneSystem/Documentation~/Header.png" width="800">
+<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Images/Header.png" width="800">
 
 [![license](https://img.shields.io/badge/LICENSE-MIT-green.svg)](LICENSE)
 
@@ -22,30 +22,21 @@ This library includes an API for loading scenes and a function that enables scen
 ## Setup
 
 ### Requirement
-* Unity 2019.4 or higher
+* Unity 2021.3 or higher
 
 ### Install
 1. Open the Package Manager from Window > Package Manager
 2. "+" button > Add package from git URL
 3. Enter the following to install
-   * https://github.com/NK-Studio/SceneSystem.git?path=/Assets/SceneSystem
-
-
-or open Packages/manifest.json and add the following to the dependencies block.
-
-```json
-{
-    "dependencies": {
-        "com.annulusgames.scene-system": "https://github.com/AnnulusGames/SceneSystem.git?path=/Assets/SceneSystem"
-    }
-}
+```
+https://github.com/NK-Studio/SceneSystem.git#UPM
 ```
 
 ### Namespace
 When using Scene System, add the following line at the beginning of the file.
 
 ```cs
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 ```
 
 ## Scenes
@@ -57,7 +48,7 @@ To load/unload a scene, write as follows.
 ``` cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 
 void Example()
 {
@@ -122,7 +113,7 @@ Also, by passing a class that implements ILoadSceneCallbackReceiver, it is possi
 ``` cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 
 public class Example : MonoBehaviour, ILoadSceneCallbackReceiver
 {
@@ -153,7 +144,7 @@ By using SceneReference, it becomes possible to edit Scene assets on the Inspect
 
 ``` cs
 using UnityEngine;
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 
 public class SceneReferenceExample : MonoBehaviour
 {
@@ -170,7 +161,7 @@ public class SceneReferenceExample : MonoBehaviour
 }
 ```
 
-<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Assets/SceneSystem/Documentation~/img1.png" width="420">
+<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Images/img1.png" width="420">
 
 ## LoadSceneOperationHandle
 All asynchronous methods in the Scene System have a structure called LoadSceneOperationHandle as a return value.
@@ -240,7 +231,7 @@ https://docs.unity3d.com/2019.4/Documentation/ScriptReference/AsyncOperation-all
 ## Loading Screen
 Scene System provides the LoadingScreen component as a function to display the loading screen.
 
-<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Assets/SceneSystem/Documentation~/img2.png" width="500">
+<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Images/img2.png" width="500">
 
 You can create your own loading screen by customizing the LoadingScreen component.
 
@@ -282,7 +273,7 @@ To use the loading screen created with LoadingScreen component, use the WithLoad
 
 ``` cs
 using UnityEngine;
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 
 public sealed class LoadingScreenSample : MonoBehaviour
 {
@@ -308,7 +299,7 @@ It is also possible to create your own class by inheriting from LoadingScreen.
 
 ``` cs
 using UnityEngine;
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 
 public class CustomLoadingScreen : LoadingScreen
 {
@@ -333,7 +324,7 @@ public class CustomLoadingScreen : LoadingScreen
 A loading screen implementation sample using LoadingScreen is available and can be installed from Package Manager/Samples.
 Please refer to it when you actually create a loading screen.
 
-<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Assets/SceneSystem/Documentation~/img3.png" width="500">
+<img src="https://github.com/AnnulusGames/SceneSystem/blob/main/Images/img3.png" width="500">
 
 ## SceneContainer
 When adopting a project structure that uses multiple scenes in Unity, it is necessary to implement the transition of multiple scenes in some way. Scene System provides the SceneContainer class as a function for performing such complex scene transitions.
@@ -406,7 +397,7 @@ By introducing UniRx, it becomes possible to observable events related to scene 
 To get scene loading/unloading events and active scene switching events as IObservable, write as follows.
 
 ``` cs
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 using UniRx;
 
 void Example()
@@ -469,7 +460,7 @@ By introducing UniTask, it becomes possible to wait for LoadSceneOperationHandle
 Use ToUniTask to convert the LoadSceneOperationHandle to a UniTask.
 
 ``` cs
-using AnnulusGames.SceneSystem;
+using UnityEngine.SceneSystem;
 using Cysharp.Threading.Tasks;
 
 async UniTaskVoid ExampleAsync()
