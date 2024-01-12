@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">    
-    <ui:VisualElement style="flex-grow: 1; margin-top: 3px;" />    
+    <ui:VisualElement style="flex-grow: 1; margin-top: 6px;" />    
     <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
     <uie:PropertyField binding-path="LoadStyle" name="property-LoadStyle" />
     <uie:PropertyField name="property-LoadScene" binding-path="loadScene" style="display: none;" />
