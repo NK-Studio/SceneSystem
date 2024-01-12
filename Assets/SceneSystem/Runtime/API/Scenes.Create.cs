@@ -1,7 +1,6 @@
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public static partial class Scenes
     {

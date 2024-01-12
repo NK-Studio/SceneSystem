@@ -2,7 +2,7 @@
 using System;
 using UniRx;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public static class SceneContainerUniRxExtensions
     {

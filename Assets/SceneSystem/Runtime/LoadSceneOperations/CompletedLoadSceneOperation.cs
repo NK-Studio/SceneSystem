@@ -1,6 +1,6 @@
 using System;
 
-namespace AnnulusGames.SceneSystem.LoadSceneOperations
+namespace UnityEngine.SceneSystem.LoadSceneOperations
 {
     public sealed class CompletedLoadSceneOperation : LoadSceneOperationBase
     {

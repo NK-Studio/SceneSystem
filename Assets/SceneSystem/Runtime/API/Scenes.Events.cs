@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public static partial class Scenes
     {

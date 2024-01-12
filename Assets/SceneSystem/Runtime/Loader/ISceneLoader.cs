@@ -1,7 +1,7 @@
 using UnityEngine.SceneManagement;
-using AnnulusGames.SceneSystem.LoadSceneOperations;
+using UnityEngine.SceneSystem.LoadSceneOperations;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public interface ISceneLoader
     {

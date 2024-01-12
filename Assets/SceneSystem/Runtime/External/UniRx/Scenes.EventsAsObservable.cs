@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UniRx;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public static partial class Scenes
     {

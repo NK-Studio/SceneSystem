@@ -2,7 +2,7 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public static class LoadSceneOperationHandleExtensions
     {

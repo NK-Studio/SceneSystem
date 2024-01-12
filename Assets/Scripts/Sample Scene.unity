@@ -167,9 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fc4b73d3bdf43aeac288614f778a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skipMode: 0
-  minimumLoadingTime: 0
-  destroyOnCompleted: 0
+  SkipMode: 0
+  MinimumLoadingTime: 0
+  DestroyOnCompleted: 0
   onLoading:
     m_PersistentCalls:
       m_Calls: []
@@ -180,7 +180,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LoadStyle: 0
-  MainScene:
+  LoadScene:
     sceneAsset: {fileID: 0}
     path: 
   AdditiveScenes: []

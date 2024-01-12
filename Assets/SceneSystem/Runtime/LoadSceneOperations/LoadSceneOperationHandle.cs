@@ -1,7 +1,7 @@
 using System;
-using AnnulusGames.SceneSystem.LoadSceneOperations;
+using UnityEngine.SceneSystem.LoadSceneOperations;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public struct LoadSceneOperationHandle
     {

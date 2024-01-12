@@ -1,4 +1,4 @@
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     public interface ISceneContainerCallbackReceiver
     {

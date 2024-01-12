@@ -1,6 +1,6 @@
 using System;
 
-namespace AnnulusGames.SceneSystem
+namespace UnityEngine.SceneSystem
 {
     internal static class ThrowHelper
     {
