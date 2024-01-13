@@ -29,6 +29,11 @@
             "name": "com.unity.inputsystem",
             "expression": "",
             "define": "SCENESYSTEM_SUPPORT_INPUTSYSTEM"
+        },
+        {
+            "name": "com.nkstudio.scenereference",
+            "expression": "",
+            "define": "USE_SCENE_REFERENCE"
         }
     ],
     "noEngineReferences": false

@@ -1,3 +1,5 @@
+#if USE_SCENE_REFERENCE
+
 namespace UnityEngine.SceneSystem
 {
     public static class WithLoadingScreenExtensions
@@ -9,3 +11,4 @@ namespace UnityEngine.SceneSystem
         }
     }
 }
+#endif

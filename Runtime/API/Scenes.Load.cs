@@ -1,3 +1,5 @@
+#if USE_SCENE_REFERENCE
+
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.SceneSystem.LoadSceneOperations;
@@ -266,3 +268,4 @@ namespace UnityEngine.SceneSystem
         }
     }
 }
+#endif

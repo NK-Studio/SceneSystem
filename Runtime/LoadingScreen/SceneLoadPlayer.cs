@@ -1,3 +1,4 @@
+#if USE_SCENE_REFERENCE
 using System;
 using System.Linq;
 using UnityEngine.Events;
@@ -218,3 +219,4 @@ namespace UnityEngine.SceneSystem
         Manual
     }
 }
+#endif
