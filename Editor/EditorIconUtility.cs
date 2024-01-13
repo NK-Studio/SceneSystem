@@ -1,6 +1,5 @@
+#if USE_SCENE_REFERENCE
 using System.IO;
-using Unity.VisualScripting.TextureAssets;
-using UnityEditor;
 using UnityEngine;
 
 namespace UnityEditor.SceneSystem
@@ -27,3 +26,4 @@ namespace UnityEditor.SceneSystem
         }
     }
 }
+#endif

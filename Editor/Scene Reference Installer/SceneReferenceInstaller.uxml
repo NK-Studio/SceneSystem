@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/SceneSystem/Editor/Scene%20Reference%20Installer/SceneReferenceInstaller.uss?fileID=7433441132597879392&amp;guid=67fabc1e7bed84cd198380b225ad2e41&amp;type=3#SceneReferenceInstaller" />
+    <ui:Label text="Scene System" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 10px; margin-right: 0; margin-bottom: 10px; margin-left: 0; font-size: 32px; -unity-text-align: middle-center; -unity-font-style: bold;" />
+    <ui:Label text="State : Install" name="text-install" style="-unity-text-align: upper-center; font-size: 16px; margin-bottom: 4px;" />
+    <ui:Button text="Install" name="button-install" style="font-size: 14px; margin-top: 2px;" />
+    <ui:HelpBox name="helpBox-info" text="Info" class="helpBox-info" style="justify-content: center; margin-top: 2px; margin-bottom: 2px;" />
+    <ui:VisualElement style="align-items: center; margin-top: 2px; margin-bottom: 2px;">
+        <ui:Button text="Document" name="button-Document" style="font-size: 16px; width: 100px; height: 30px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; align-items: center; bottom: 6px; right: 0; left: 0; position: absolute; width: 100%; height: 55px; flex-direction: column;">
+        <ui:VisualElement style="flex-grow: 1; position: absolute; bottom: 20px; right: 0; left: 0; align-items: center;">
+            <ui:Toggle label="Show At Startup" value="true" name="toggle-ShowAtStartup" class="toggle-ShowAtStartup" style="justify-content: space-around;" />
+        </ui:VisualElement>
+        <ui:Label text="Version : 1.0.0" name="label-version" style="-unity-text-align: upper-center; font-size: 14px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; position: absolute; bottom: 0; right: 0; left: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

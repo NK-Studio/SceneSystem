@@ -1,0 +1,16 @@
+.helpBox-info {
+}
+
+.helpBox-info Label {
+    -unity-text-align: upper-center;
+    font-size: 14px;
+}
+
+.toggle-ShowAtStartup Label {
+    min-width: 92px;
+    font-size: 12px;
+}
+
+.toggle-ShowAtStartup {
+    justify-content: center;
+}
