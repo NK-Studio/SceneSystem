@@ -34,9 +34,17 @@ public class SceneSystemWizard : EditorWindow
     {
         if (EditorPrefs.GetBool(nameof(SceneSystemWizard)))
         {
-            if (!HasOpenInstances<SceneSystemWizard>())
-                SceneSystemWizardWindow();
+            EditorApplication.update += ShowAtStartupTask;
         }
+    }
+
+    private static void ShowAtStartupTask()
+    {
+        if (EditorPrefs.GetBool(nameof(SceneSystemWizard)))
+        {
+            SceneSystemWizardWindow();
+        }
+        EditorApplication.update -= ShowAtStartupTask;
     }
 
     public void CreateGUI()

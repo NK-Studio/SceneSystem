@@ -22,8 +22,7 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyMainScene;
         private PropertyField _propertyAdditiveScenes;
         private PropertyField _propertyDestroyOnCompleted;
-
-
+        
         private void InitIcon()
         {
             string path = AssetDatabase.GUIDToAssetPath("a96560f7f90bb4a8ba13c91cbd976615");
@@ -38,8 +37,8 @@ namespace UnityEditor.SceneSystem
 
         private void InitElement()
         {
-            var path = AssetDatabase.GUIDToAssetPath("7524bf6ef64eb47bd98b6cb1b69ba7ef");
-            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+            string path = AssetDatabase.GUIDToAssetPath("7524bf6ef64eb47bd98b6cb1b69ba7ef");
+            VisualTreeAsset uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
             _root = new VisualElement();
             uxml.CloneTree(_root);
 

@@ -41,11 +41,11 @@ namespace UnityEngine.SceneSystem
         [Tooltip("If true, it will be automatically deleted upon completion.")]
         public bool DestroyOnCompleted;
 
-        [Space(5)]
+        [Space(5), Tooltip("Called while loading. (progress : 0.0f ~ 1.0f)")]
         public UnityEvent<float> onLoading = new UnityEvent<float>();
-        [Space(5)]
+        [Space(5), Tooltip("Called when the loading is complete.")]
         public UnityEvent onLoadCompleted = new UnityEvent();
-        [Space(5)]
+        [Space(5), Tooltip("Called when the loading screen is completed.")]
         public UnityEvent onCompleted = new UnityEvent();
 
         private LoadSceneOperationHandle _handle;
@@ -54,10 +54,7 @@ namespace UnityEngine.SceneSystem
         private float _startTime;
 
         private Action _onCompletedInternal;
-
-        public virtual void OnLoading(float progress) { }
-        public virtual void OnLoadCompleted()         { }
-        public virtual void OnCompleted()             { }
+        
         public void AllowCompletion()
         {
             _allowCompletion = true;
@@ -106,12 +103,10 @@ namespace UnityEngine.SceneSystem
                 }
 
                 onLoading.Invoke(progress);
-                OnLoading(progress);
 
                 if (!_callOnCompleted && progress >= 1f)
                 {
                     _callOnCompleted = true;
-                    OnLoadCompleted();
                     onLoadCompleted?.Invoke();
 
                     if (SkipMode == LoadingActionSkipMode.InstantComplete)
@@ -204,7 +199,6 @@ namespace UnityEngine.SceneSystem
 
         private void CallOnCompletedEvent()
         {
-            OnCompleted();
             onCompleted?.Invoke();
             _onCompletedInternal?.Invoke();
 
