@@ -13,10 +13,11 @@ public class SceneSystemWizard : EditorWindow
 
     private const string StateText = "State : ";
     private const string TargetPackage = "com.nkstudio.scenereference";
-
-    private Label stateText;
-    private Button installButton;
-
+    private static string Key => Application.companyName + "." + Application.productName + "." + nameof(SceneSystemWizard);
+    
+    private Label _stateText;
+    private Button _installButton;
+    
     [MenuItem("Tools/Scene System/Scene System Wizard")]
     public static void SceneSystemWizardWindow()
     {
@@ -32,57 +33,74 @@ public class SceneSystemWizard : EditorWindow
     [InitializeOnLoadMethod]
     private static void ShowAtStartup()
     {
-        if (EditorPrefs.GetBool(nameof(SceneSystemWizard)))
-        {
+        if (EditorPrefs.GetBool(Key)) 
             EditorApplication.update += ShowAtStartupTask;
-        }
     }
 
     private static void ShowAtStartupTask()
     {
-        if (EditorPrefs.GetBool(nameof(SceneSystemWizard)))
-        {
+        if (EditorPrefs.GetBool(Key)) 
             SceneSystemWizardWindow();
-        }
+        
         EditorApplication.update -= ShowAtStartupTask;
     }
 
     public void CreateGUI()
     {
+        // init root
         VisualElement root = rootVisualElement;
         visualTreeAsset.CloneTree(root);
-
-        installButton = root.Q<Button>("button-install");
-        stateText = root.Q<Label>("text-install");
-        var showAtStartupToggle = root.Q<Toggle>("toggle-ShowAtStartup");
-        showAtStartupToggle.value = EditorPrefs.GetBool(nameof(SceneSystemWizard));
+        
+        // load ui
+        Label versionLabel = root.Q<Label>("label-version");
+        Toggle showAtStartupToggle = root.Q<Toggle>("toggle-ShowAtStartup");
         HelpBox infoHelpBox = root.Q<HelpBox>("helpBox-info");
+        _installButton = root.Q<Button>("button-install");
+        _stateText = root.Q<Label>("text-install");
+        
+        // set ui
+        showAtStartupToggle.value = EditorPrefs.GetBool(Key);
         infoHelpBox.text = "Scene System requires Scene Reference.";
+        versionLabel.text = "Version : " + GetVersion();
 
-        UpdateVersion(root);
-
-        bool check = CheckGitUpmInstallation();
-        stateText.text = StateText + (!check ? "Not Installed" : "Installed");
-        installButton.SetEnabled(!check);
-        installButton.clicked += Install;
-        showAtStartupToggle.RegisterValueChangedCallback(evt => EditorPrefs.SetBool(nameof(SceneSystemWizard), evt.newValue));
+        // 패키지 목록을 가져오는 동안 대기
+        _stateText.text = StateText + "Checking...";
+        _installButton.SetEnabled(false);
+        
+        root.schedule.Execute(() =>
+        {
+            bool check = CheckGitUpmInstallation();
+            _stateText.text = StateText + (!check ? "Not Installed" : "Installed");
+            _installButton.SetEnabled(!check);
+        }).ExecuteLater(100);
+        
+        _installButton.clicked += Install;
+        
+        showAtStartupToggle.RegisterValueChangedCallback(evt => EditorPrefs.SetBool(Key, evt.newValue));
     }
 
+    /// <summary>
+    /// Scene Reference를 설치합니다.
+    /// </summary>
     private void Install()
     {
-        stateText.text = StateText + "Installing...";
-        installButton.SetEnabled(false);
+        _stateText.text = StateText + "Installing...";
+        _installButton.SetEnabled(false);
         Client.Add("https://github.com/NK-Studio/SceneReference.git#UPM");
     }
 
+    /// <summary>
+    /// Scene Reference가 설치되어 있는지 확인합니다.
+    /// </summary>
+    /// <returns></returns>
     private bool CheckGitUpmInstallation()
     {
         ListRequest request = Client.List();
         while (!request.IsCompleted)
         {
             // 패키지 목록을 가져오는 동안 대기
-            stateText.text = StateText + "Checking...";
-            installButton.SetEnabled(false);
+            _stateText.text = StateText + "Checking...";
+            _installButton.SetEnabled(false);
         }
 
         if (request.Status == StatusCode.Success)
@@ -97,16 +115,17 @@ public class SceneSystemWizard : EditorWindow
         return false;
     }
 
-    private void UpdateVersion(VisualElement root)
+    /// <summary>
+    /// Scene System의 버전을 가져옵니다.
+    /// </summary>
+    /// <returns></returns>
+    private string GetVersion()
     {
-        Label versionLabel = root.Q<Label>("label-version");
-
         string path = AssetDatabase.GUIDToAssetPath("247393281fb1d493086b31cd293f0d27");
-
         TextAsset packageJson = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
         PackageInfo info = JsonUtility.FromJson<PackageInfo>(packageJson.text);
 
-        versionLabel.text = "Version : " + info.version;
+        return info.version;
     }
 }
 
