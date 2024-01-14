@@ -41,7 +41,7 @@ namespace UnityEngine.SceneSystem
         [Tooltip("If true, it will be automatically deleted upon completion.")]
         public bool DestroyOnCompleted;
 
-        [Space(5), Tooltip("Called while loading. (progress : 0.0f ~ 1.0f)")]
+        [Space(5), Tooltip("Called during loading. (MinimumLoadingTime must be greater than 0.)")]
         public UnityEvent<float> onLoading = new UnityEvent<float>();
         [Space(5), Tooltip("Called when the loading is complete.")]
         public UnityEvent onLoadCompleted = new UnityEvent();
