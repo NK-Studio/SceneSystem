@@ -10,7 +10,7 @@ namespace UnityEngine.SceneSystem
     {
         private static List<LoadSceneOperationBase> operationListCache = new List<LoadSceneOperationBase>();
 
-        public static ISceneLoader Loader { get; set; } = new SceneLoader();
+        public static ISceneHandler Loader { get; set; } = new SceneHandler();
 
         public static LoadSceneOperationHandle LoadSceneAsync(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {

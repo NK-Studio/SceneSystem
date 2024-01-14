@@ -9,8 +9,8 @@ using UnityEngine.InputSystem;
 
 namespace UnityEngine.SceneSystem
 {
-    [AddComponentMenu("Scene System/Scene Load Player")]
-    public class SceneLoadPlayer : MonoBehaviour
+    [AddComponentMenu("Scene System/Scene Loader")]
+    public class SceneLoader : MonoBehaviour
     {
         /// <summary>
         /// The scene loading style.

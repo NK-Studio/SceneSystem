@@ -3,7 +3,7 @@ using UnityEngine.SceneSystem.LoadSceneOperations;
 
 namespace UnityEngine.SceneSystem
 {
-    public interface ISceneLoader
+    public interface ISceneHandler
     {
         LoadSceneOperationHandle LoadAsync(string sceneName, LoadSceneMode loadSceneMode);
         LoadSceneOperationHandle UnloadAsync(string sceneName);

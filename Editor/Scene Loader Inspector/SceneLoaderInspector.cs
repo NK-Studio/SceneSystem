@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace UnityEditor.SceneSystem
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(SceneLoadPlayer))]
+    [CustomEditor(typeof(SceneLoader))]
     public class SceneLoaderInspector : Editor
     {
         private VisualElement _root;
@@ -23,13 +23,6 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyAdditiveScenes;
         private PropertyField _propertyDestroyOnCompleted;
         
-        private void InitIcon()
-        {
-            string path = AssetDatabase.GUIDToAssetPath("a96560f7f90bb4a8ba13c91cbd976615");
-            Texture2D iconTexture = EditorIconUtility.LoadIconResource("Loading Scene Player", $"{path}/");
-            EditorGUIUtility.SetIconForObject(target, iconTexture);
-        }
-
         private void FindProperties()
         {
             _loadStyleProperty = serializedObject.FindProperty("LoadStyle");
@@ -47,10 +40,17 @@ namespace UnityEditor.SceneSystem
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
             _propertyDestroyOnCompleted = _root.Q<PropertyField>("property-DestroyOnCompleted");
         }
-
+        
+        private void ChangeIcon()
+        {
+            string path = AssetDatabase.GUIDToAssetPath("a96560f7f90bb4a8ba13c91cbd976615");
+            Texture2D iconTexture = EditorIconUtility.LoadIconResource("Scene Loader", $"{path}/");
+            EditorGUIUtility.SetIconForObject(target, iconTexture);
+        }
+        
         public override VisualElement CreateInspectorGUI()
         {
-            InitIcon();
+            ChangeIcon();
             FindProperties();
             InitElement();
 
