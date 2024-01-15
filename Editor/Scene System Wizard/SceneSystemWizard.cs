@@ -12,6 +12,8 @@ public class SceneSystemWizard : EditorWindow
 
     private const string StateText = "State : ";
     private const string TargetPackage = "com.nkstudio.scenereference";
+    
+    private const string DocumentUrl = "https://nk-studio.github.io/Packages/com.unity.scene-system@1.0/index.html";
 
     private static string Key =>
         Application.companyName + "." + Application.productName + "." + nameof(SceneSystemWizard);
@@ -54,6 +56,7 @@ public class SceneSystemWizard : EditorWindow
         Label versionLabel = root.Q<Label>("label-version");
         Toggle showAtStartupToggle = root.Q<Toggle>("toggle-ShowAtStartup");
         HelpBox infoHelpBox = root.Q<HelpBox>("helpBox-info");
+        Button documentButton = root.Q<Button>("button-Document");
         _installButton = root.Q<Button>("button-install");
         _stateText = root.Q<Label>("text-install");
 
@@ -72,8 +75,9 @@ public class SceneSystemWizard : EditorWindow
             _stateText.text = StateText + (!check ? "Not Installed" : "Installed");
             _installButton.SetEnabled(!check);
         }).ExecuteLater(500);
-
+        
         _installButton.clicked += Install;
+        documentButton.clicked += () => Application.OpenURL(DocumentUrl);
 
         showAtStartupToggle.RegisterValueChangedCallback(evt => EditorPrefs.SetBool(Key, evt.newValue));
     }
