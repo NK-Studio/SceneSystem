@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8637991455410774566}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -107,7 +106,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8637991454730367530}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -184,7 +182,6 @@ RectTransform:
   - {fileID: 8637991455604445791}
   - {fileID: 8637991454730367530}
   m_Father: {fileID: 8637991455410774566}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -272,7 +269,6 @@ RectTransform:
   m_Children:
   - {fileID: 8637991454071790491}
   m_Father: {fileID: 8637991454707181327}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
@@ -310,7 +306,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8637991455410774566}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -371,7 +366,7 @@ GameObject:
   - component: {fileID: 8637991455410774569}
   - component: {fileID: 8637991455410774568}
   - component: {fileID: 8637991455410774571}
-  - component: {fileID: 8637991455410774567}
+  - component: {fileID: 8489698749272279252}
   m_Layer: 5
   m_Name: LoadingScreen
   m_TagString: Untagged
@@ -395,7 +390,6 @@ RectTransform:
   - {fileID: 8637991455169921966}
   - {fileID: 8637991454707181327}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -419,6 +413,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -464,7 +459,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8637991455410774567
+--- !u!114 &8489698749272279252
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,12 +468,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8637991455410774570}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d950a3a7e86704c70953b5fc10f85842, type: 3}
+  m_Script: {fileID: 11500000, guid: 89fc4b73d3bdf43aeac288614f778a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skipMode: 1
-  minimumLoadingTime: 1
-  destroyOnCompleted: 1
+  LoadStyle: 0
+  loadScene:
+    sceneAsset: {fileID: 0}
+    path: 
+  additiveScenes: []
+  SkipMode: 0
+  MinimumLoadingTime: 3
+  DestroyOnCompleted: 1
   onLoading:
     m_PersistentCalls:
       m_Calls:
@@ -496,19 +496,7 @@ MonoBehaviour:
         m_CallState: 2
   onLoadCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8637991455169921967}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Text, UnityEngine.UI
-        m_MethodName: set_text
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Press any key!
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onCompleted:
     m_PersistentCalls:
       m_Calls: []
@@ -543,7 +531,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8637991454707181327}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}

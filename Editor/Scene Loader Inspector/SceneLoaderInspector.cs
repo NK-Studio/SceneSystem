@@ -21,7 +21,6 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyLoadStyle;
         private PropertyField _propertyMainScene;
         private PropertyField _propertyAdditiveScenes;
-        private PropertyField _propertyDestroyOnCompleted;
         
         private void FindProperties()
         {
@@ -38,7 +37,7 @@ namespace UnityEditor.SceneSystem
             _propertyLoadStyle = _root.Q<PropertyField>("property-LoadStyle");
             _propertyMainScene = _root.Q<PropertyField>("property-LoadScene");
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
-            _propertyDestroyOnCompleted = _root.Q<PropertyField>("property-DestroyOnCompleted");
+
         }
         
         private void ChangeIcon()
@@ -70,12 +69,10 @@ namespace UnityEditor.SceneSystem
                 case LoadSceneMode.Single:
                     _propertyMainScene.style.display = DisplayStyle.Flex;
                     _propertyAdditiveScenes.style.display = DisplayStyle.None;
-                    _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
                     break;
                 case LoadSceneMode.Additive:
                     _propertyMainScene.style.display = DisplayStyle.None;
                     _propertyAdditiveScenes.style.display = DisplayStyle.Flex;
-                    _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
