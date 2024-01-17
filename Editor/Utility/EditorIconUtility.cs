@@ -1,4 +1,3 @@
-#if USE_SCENE_REFERENCE
 using System.IO;
 using UnityEngine;
 
@@ -26,4 +25,3 @@ namespace UnityEditor.SceneSystem
         }
     }
 }
-#endif

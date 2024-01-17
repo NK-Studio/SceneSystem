@@ -1,4 +1,3 @@
-#if USE_SCENE_REFERENCE
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -347,4 +346,3 @@ namespace UnityEngine.SceneSystem
         }
     }
 }
-#endif

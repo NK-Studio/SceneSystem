@@ -1,4 +1,3 @@
-#if USE_SCENE_REFERENCE
 using System;
 using System.Linq;
 using UnityEngine.Events;
@@ -17,6 +16,7 @@ namespace UnityEngine.SceneSystem
         /// </summary>
         public LoadSceneMode LoadStyle;
 
+#if USE_SCENE_REFERENCE
         /// <summary>
         /// Scene to load.
         /// </summary>
@@ -28,7 +28,20 @@ namespace UnityEngine.SceneSystem
         /// </summary>
         [SerializeField]
         private SceneReference[] additiveScenes;
+#else
+        /// <summary>
+        /// Scene to load.
+        /// </summary>
+        [SerializeField]
+        private string loadScene;
 
+        /// <summary>
+        /// Additive scenes to load.
+        /// </summary>
+        [SerializeField]
+        private string[] additiveScenes;
+#endif
+        
         /// <summary>
         /// Represents the skip mode for a loading action.
         /// </summary>
@@ -65,16 +78,28 @@ namespace UnityEngine.SceneSystem
             switch (LoadStyle)
             {
                 case LoadSceneMode.Single:
+#if USE_SCENE_REFERENCE
                     if (!string.IsNullOrEmpty(loadScene.Path))
                         Scenes.LoadSceneAsync(loadScene).WithLoadingScreen(this);
+#else
+                    if (!string.IsNullOrEmpty(loadScene))
+                        Scenes.LoadSceneAsync(loadScene).WithLoadingScreen(this);
+#endif
                     break;
                 case LoadSceneMode.Additive:
                     if (additiveScenes.Length > 0)
                     {
+#if USE_SCENE_REFERENCE
                         if (additiveScenes.Any(sceneReference => string.IsNullOrEmpty(sceneReference.Path)))
                             return;
 
                         Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+#else
+                        if (additiveScenes.Any(string.IsNullOrEmpty))
+                            return;
+
+                        Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);           
+#endif
                     }
                     break;
                 default:
@@ -167,7 +192,11 @@ namespace UnityEngine.SceneSystem
         /// If the LoadStyle is not LoadSceneMode.Single, returns null.
         /// </summary>
         /// <returns>The SceneReference to be loaded or null.</returns>
+#if USE_SCENE_REFERENCE
         public SceneReference GetLoadScene()
+#else
+        public string GetLoadScene()
+#endif
         {
             if (LoadStyle == LoadSceneMode.Single)
                 return loadScene;
@@ -179,7 +208,11 @@ namespace UnityEngine.SceneSystem
         /// Gets an array of SceneReference objects representing the scenes to be loaded.
         /// </summary>
         /// <returns>An array of SceneReference objects if the LoadStyle is set to LoadSceneMode.Additive; otherwise, returns null.</returns>
+#if USE_SCENE_REFERENCE
         public SceneReference[] GetLoadScenes()
+#else
+        public string[] GetLoadScenes()   
+#endif
         {
             if (LoadStyle == LoadSceneMode.Additive)
                 return additiveScenes;
@@ -213,4 +246,3 @@ namespace UnityEngine.SceneSystem
         Manual
     }
 }
-#endif

@@ -1,5 +1,3 @@
-#if USE_SCENE_REFERENCE
-
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.SceneSystem.LoadSceneOperations;
@@ -23,10 +21,12 @@ namespace UnityEngine.SceneSystem
             return Loader.LoadAsync(sceneName, loadSceneMode);
         }
 
+#if USE_SCENE_REFERENCE
         public static LoadSceneOperationHandle LoadSceneAsync(SceneReference sceneReference, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             return Loader.LoadAsync(sceneReference.Path, loadSceneMode);
         }
+#endif
 
         public static LoadSceneOperationHandle LoadScenesAsync(params int[] sceneBuildIndexes)
         {
@@ -87,6 +87,7 @@ namespace UnityEngine.SceneSystem
             }
         }
 
+#if USE_SCENE_REFERENCE
         public static LoadSceneOperationHandle LoadScenesAsync(params SceneReference[] sceneReferences)
         {
             return LoadScenesAsync(LoadMultiSceneMode.Parallel, sceneReferences);
@@ -115,6 +116,7 @@ namespace UnityEngine.SceneSystem
                     return new ConcatLoadSceneOperation(operationListCache.ToArray()).Execute();
             }
         }
+#endif
 
         public static LoadSceneOperationHandle UnloadSceneAsync(int sceneBuildIndex)
         {
@@ -127,12 +129,13 @@ namespace UnityEngine.SceneSystem
             return Loader.UnloadAsync(sceneName);
         }
 
+#if USE_SCENE_REFERENCE
         public static LoadSceneOperationHandle UnloadSceneAsync(SceneReference sceneReference)
         {
             return Loader.UnloadAsync(sceneReference.Path);
         }
-
-
+#endif
+        
         public static LoadSceneOperationHandle UnloadScenesAsync(params int[] sceneBuildIndexes)
         {
             if (sceneBuildIndexes.Length == 0)
@@ -169,6 +172,7 @@ namespace UnityEngine.SceneSystem
             return new MergeLoadSceneOperation(operationListCache.ToArray()).Execute();
         }
 
+#if USE_SCENE_REFERENCE
         public static LoadSceneOperationHandle UnloadScenesAsync(params SceneReference[] sceneReferences)
         {
             if (sceneReferences.Length == 0)
@@ -186,16 +190,19 @@ namespace UnityEngine.SceneSystem
 
             return new MergeLoadSceneOperation(operationListCache.ToArray()).Execute();
         }
+#endif
 
         public static void LoadScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             Loader.Load(sceneName, loadSceneMode);
         }
 
+#if USE_SCENE_REFERENCE
         public static void LoadScene(SceneReference sceneReference, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             Loader.Load(sceneReference.Path, loadSceneMode);
         }
+#endif
 
         public static void LoadScene(int sceneBuildIndex, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
@@ -208,10 +215,12 @@ namespace UnityEngine.SceneSystem
             Loader.Unload(sceneName);
         }
 
+#if USE_SCENE_REFERENCE
         public static void UnloadScene(SceneReference sceneReference)
         {
             Loader.Unload(sceneReference.Path);
         }
+#endif
 
         public static void UnloadScene(int sceneBuildIndex)
         {
@@ -235,6 +244,7 @@ namespace UnityEngine.SceneSystem
             }
         }
 
+#if USE_SCENE_REFERENCE
         public static void LoadScenes(params SceneReference[] sceneReferences)
         {
             foreach (var sceneReference in sceneReferences)
@@ -242,6 +252,7 @@ namespace UnityEngine.SceneSystem
                 LoadScene(sceneReference, LoadSceneMode.Additive);
             }
         }
+#endif
 
         public static void UnloadScenes(params int[] sceneBuildIndexes)
         {
@@ -259,6 +270,7 @@ namespace UnityEngine.SceneSystem
             }
         }
 
+#if USE_SCENE_REFERENCE
         public static void UnloadScenes(params SceneReference[] sceneReferences)
         {
             foreach (var sceneReference in sceneReferences)
@@ -266,6 +278,6 @@ namespace UnityEngine.SceneSystem
                 UnloadScene(sceneReference);
             }
         }
+#endif
     }
 }
-#endif
