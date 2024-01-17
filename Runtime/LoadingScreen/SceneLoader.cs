@@ -6,8 +6,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 #endif
 
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
+
 namespace UnityEngine.SceneSystem
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Scene System/Scene Loader")]
     public class SceneLoader : MonoBehaviour
     {
@@ -20,6 +25,15 @@ namespace UnityEngine.SceneSystem
         /// Represents whether asynchronous operations should be used. (Additive Only)
         /// </summary>
         public bool UseAsync;
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Indicates whether the editor should load it automatically. (Editor Only)
+        /// </summary>
+        [Tooltip("Indicates whether the editor should load it automatically. (Editor Only)")]
+        [SerializeField]
+        private bool editorAutoLoad = true;
+#endif
 
 #if USE_SCENE_REFERENCE
         /// <summary>
@@ -80,6 +94,12 @@ namespace UnityEngine.SceneSystem
 
         private void Start()
         {
+            if (Application.isEditor && !Application.isPlaying)
+            {
+                OpenSceneEditorAutoLoad();
+                return;
+            }
+
             switch (LoadStyle)
             {
                 case LoadSceneMode.Single:
@@ -94,23 +114,32 @@ namespace UnityEngine.SceneSystem
                 case LoadSceneMode.Additive:
                     if (additiveScenes.Length > 0)
                     {
+                        bool preCheck = false;
+                        if (Application.isEditor && Application.isPlaying)
+                            preCheck = CheckAllLoadAdditiveScene();
+                        
 #if USE_SCENE_REFERENCE
                         if (additiveScenes.Any(sceneReference => string.IsNullOrEmpty(sceneReference.Path)))
                             return;
 
-                        if (UseAsync)
-                            Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
-                        else
-                            Scenes.LoadScenes(additiveScenes);
+                        if (!preCheck)
+                        {
+                            if (UseAsync)
+                                Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+                            else
+                                Scenes.LoadScenes(additiveScenes);     
+                        }
 #else
-
                         if (additiveScenes.Any(string.IsNullOrEmpty))
                             return;
 
-                        if (UseAsync)
-                            Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
-                        else
-                            Scenes.LoadScenes(additiveScenes);
+                        if (!preCheck)
+                        {
+                            if (UseAsync)
+                                Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+                            else
+                                Scenes.LoadScenes(additiveScenes);
+                        }
 #endif
                     }
                     break;
@@ -121,6 +150,9 @@ namespace UnityEngine.SceneSystem
 
         private void Update()
         {
+            if (!Application.isPlaying)
+                return;
+
             if (!_callOnCompleted)
             {
                 float time = Time.realtimeSinceStartup - _startTime;
@@ -248,6 +280,88 @@ namespace UnityEngine.SceneSystem
             _onCompletedInternal?.Invoke();
 
             if (DestroyOnCompleted) Destroy(gameObject);
+        }
+
+        private void OpenSceneEditorAutoLoad()
+        {
+#if UNITY_EDITOR
+            if (LoadStyle == LoadSceneMode.Single)
+                return;
+
+            if (editorAutoLoad)
+            {
+#if USE_SCENE_REFERENCE
+                if (additiveScenes.Length > 0)
+                {
+                    for (int i = 0; i < additiveScenes.Length; i++)
+                    {
+                        string targetScene = additiveScenes[i].Path;
+
+                        if (!SceneManager.GetSceneByPath(targetScene).isLoaded)
+                            EditorSceneManager.OpenScene(targetScene, OpenSceneMode.Additive);
+                    }
+                }
+#else
+                if (additiveScenes.Length > 0)
+                {
+                    for (int i = 0; i < additiveScenes.Length; i++)
+                    {
+                        string targetScene = additiveScenes[i];
+                        Scene foundAsset = SceneManager.GetSceneByPath(targetScene);
+
+                        if (!foundAsset.isLoaded)
+                            EditorSceneManager.OpenScene(targetScene, OpenSceneMode.Additive);
+                    }
+                }
+#endif
+            }
+#endif
+        }
+
+        private bool CheckAllLoadAdditiveScene()
+        {
+#if UNITY_EDITOR
+            
+            if (LoadStyle == LoadSceneMode.Single)
+                return false;
+            
+            // additiveScenes가 모두 로드되어있는지 체크
+            bool[] isLoaded = new bool[additiveScenes.Length];
+
+#if USE_SCENE_REFERENCE
+            if (additiveScenes.Length > 0)
+            {
+                for (int i = 0; i < additiveScenes.Length; i++)
+                {
+                    string targetScene = additiveScenes[i].Path;
+
+                    if (SceneManager.GetSceneByPath(targetScene).isLoaded)
+                        isLoaded[i] = true;
+                    else
+                        isLoaded[i] = false;
+                }
+            }
+#else
+            if (additiveScenes.Length > 0)
+            {
+                for (int i = 0; i < additiveScenes.Length; i++)
+                {
+                    string targetScene = additiveScenes[i];
+                    Scene foundAsset = SceneManager.GetSceneByPath(targetScene);
+
+                    if (foundAsset.isLoaded)
+                        isLoaded[i] = true;
+                    else
+                        isLoaded[i] = false;
+                }
+            }
+#endif
+
+            if (isLoaded.All(x => x))
+                return true;
+
+#endif
+            return false;
         }
     }
 
