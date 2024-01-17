@@ -36,8 +36,11 @@ public class SceneSystemWizard : EditorWindow
     [InitializeOnLoadMethod]
     private static void ShowAtStartup()
     {
-        if (EditorPrefs.GetBool(Key, true))
-            EditorApplication.update += ShowAtStartupTask;
+        if (!EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            if (EditorPrefs.GetBool(Key, true))
+                EditorApplication.update += ShowAtStartupTask;
+        }
     }
 
     private static void ShowAtStartupTask()
