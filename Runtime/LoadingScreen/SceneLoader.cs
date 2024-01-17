@@ -16,6 +16,11 @@ namespace UnityEngine.SceneSystem
         /// </summary>
         public LoadSceneMode LoadStyle;
 
+        /// <summary>
+        /// Represents whether asynchronous operations should be used. (Additive Only)
+        /// </summary>
+        public bool UseAsync;
+
 #if USE_SCENE_REFERENCE
         /// <summary>
         /// Scene to load.
@@ -41,7 +46,7 @@ namespace UnityEngine.SceneSystem
         [SerializeField]
         private string[] additiveScenes;
 #endif
-        
+
         /// <summary>
         /// Represents the skip mode for a loading action.
         /// </summary>
@@ -67,7 +72,7 @@ namespace UnityEngine.SceneSystem
         private float _startTime;
 
         private Action _onCompletedInternal;
-        
+
         public void AllowCompletion()
         {
             _allowCompletion = true;
@@ -93,12 +98,19 @@ namespace UnityEngine.SceneSystem
                         if (additiveScenes.Any(sceneReference => string.IsNullOrEmpty(sceneReference.Path)))
                             return;
 
-                        Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+                        if (UseAsync)
+                            Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+                        else
+                            Scenes.LoadScenes(additiveScenes);
 #else
+
                         if (additiveScenes.Any(string.IsNullOrEmpty))
                             return;
 
-                        Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);           
+                        if (UseAsync)
+                            Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
+                        else
+                            Scenes.LoadScenes(additiveScenes);
 #endif
                     }
                     break;
@@ -211,7 +223,7 @@ namespace UnityEngine.SceneSystem
 #if USE_SCENE_REFERENCE
         public SceneReference[] GetLoadScenes()
 #else
-        public string[] GetLoadScenes()   
+        public string[] GetLoadScenes()
 #endif
         {
             if (LoadStyle == LoadSceneMode.Additive)

@@ -1,11 +1,11 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">    
-    <ui:VisualElement style="flex-grow: 1; margin-top: 6px;" />    
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
     <uie:PropertyField binding-path="LoadStyle" name="property-LoadStyle" />
     <uie:PropertyField name="property-LoadScene" binding-path="loadScene" style="display: none;" />
     <uie:PropertyField name="property-AdditiveScenes" binding-path="additiveScenes" style="display: none;" />
-    <uie:PropertyField name="property-SkipMode" binding-path="SkipMode" />
-    <uie:PropertyField name="property-MinimumLoadingTime" binding-path="MinimumLoadingTime" />
+    <uie:PropertyField binding-path="UseAsync" name="property-UseAsync" style="display: none;" />
+    <uie:PropertyField name="property-SkipMode" binding-path="SkipMode" style="display: none;" />
+    <uie:PropertyField name="property-MinimumLoadingTime" binding-path="MinimumLoadingTime" style="display: none;" />
     <uie:PropertyField name="property-DestroyOnCompleted" binding-path="DestroyOnCompleted" />
     <ui:Foldout text="Events" value="false" style="-unity-font-style: bold;">
         <uie:PropertyField name="property-onLoading" binding-path="onLoading" />

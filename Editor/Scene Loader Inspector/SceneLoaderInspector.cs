@@ -16,14 +16,19 @@ namespace UnityEditor.SceneSystem
         private VisualTreeAsset _visualTree;
 
         private SerializedProperty _loadStyleProperty;
+        private SerializedProperty _useAsyncProperty;
 
         private PropertyField _propertyLoadStyle;
+        private PropertyField _propertyUseAsync;
         private PropertyField _propertyMainScene;
         private PropertyField _propertyAdditiveScenes;
+        private PropertyField _propertySkipMode;
+        private PropertyField _propertyMinimumLoadingTime;
         
         private void FindProperties()
         {
             _loadStyleProperty = serializedObject.FindProperty("LoadStyle");
+            _useAsyncProperty = serializedObject.FindProperty("UseAsync");
         }
 
         private void InitElement()
@@ -34,9 +39,11 @@ namespace UnityEditor.SceneSystem
             uxml.CloneTree(_root);
 
             _propertyLoadStyle = _root.Q<PropertyField>("property-LoadStyle");
+            _propertyUseAsync = _root.Q<PropertyField>("property-UseAsync");
             _propertyMainScene = _root.Q<PropertyField>("property-LoadScene");
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
-
+            _propertySkipMode = _root.Q<PropertyField>("property-SkipMode");
+            _propertyMinimumLoadingTime = _root.Q<PropertyField>("property-MinimumLoadingTime");
         }
         
         private void ChangeIcon()
@@ -55,6 +62,7 @@ namespace UnityEditor.SceneSystem
             UpdateLoadStyle(_loadStyleProperty);
 
             _propertyLoadStyle.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
+            _propertyUseAsync.RegisterValueChangeCallback(evt => UpdateUseAsync(evt.changedProperty));
 
             return _root;
         }
@@ -68,13 +76,44 @@ namespace UnityEditor.SceneSystem
                 case LoadSceneMode.Single:
                     _propertyMainScene.style.display = DisplayStyle.Flex;
                     _propertyAdditiveScenes.style.display = DisplayStyle.None;
+                    _propertyUseAsync.style.display = DisplayStyle.None;
+                    _propertySkipMode.style.display = DisplayStyle.Flex;
+                    _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
                     break;
                 case LoadSceneMode.Additive:
                     _propertyMainScene.style.display = DisplayStyle.None;
                     _propertyAdditiveScenes.style.display = DisplayStyle.Flex;
+                    _propertyUseAsync.style.display = DisplayStyle.Flex;
+                    
+                    if (_useAsyncProperty.boolValue)
+                    {
+                        _propertySkipMode.style.display = DisplayStyle.Flex;
+                        _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+                    }
+                    else
+                    {
+                        _propertySkipMode.style.display = DisplayStyle.None;
+                        _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void UpdateUseAsync(SerializedProperty evtChangedProperty)
+        {
+            var useAsync = evtChangedProperty.boolValue;
+            
+            if (useAsync)
+            {
+                _propertySkipMode.style.display = DisplayStyle.Flex;
+                _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                _propertySkipMode.style.display = DisplayStyle.None;
+                _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
             }
         }
     }
