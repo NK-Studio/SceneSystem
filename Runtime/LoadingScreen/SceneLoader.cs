@@ -74,11 +74,11 @@ namespace UnityEngine.SceneSystem
         public bool DestroyOnCompleted;
 
         [Space(5), Tooltip("Called during loading. (MinimumLoadingTime must be greater than 0.)")]
-        public UnityEvent<float> onLoading = new UnityEvent<float>();
+        public UnityEvent<float> onLoading;
         [Space(5), Tooltip("Called when the loading is complete.")]
-        public UnityEvent onLoadCompleted = new UnityEvent();
+        public UnityEvent onLoadCompleted;
         [Space(5), Tooltip("Called when the loading screen is completed.")]
-        public UnityEvent onCompleted = new UnityEvent();
+        public UnityEvent onCompleted;
 
         private LoadSceneOperationHandle _handle;
         private bool _callOnCompleted;
@@ -132,7 +132,7 @@ namespace UnityEngine.SceneSystem
                         else
                         {
 #if UNITY_EDITOR
-                            if (onLoading != null)
+                            if (onLoading.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다." :
@@ -140,7 +140,7 @@ namespace UnityEngine.SceneSystem
                                 Debug.LogWarning(msg);
                             }
 
-                            if (onLoadCompleted != null)
+                            if (onLoadCompleted.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다." :
@@ -148,7 +148,7 @@ namespace UnityEngine.SceneSystem
                                 Debug.LogWarning(msg);
                             }
 
-                            if (onCompleted != null)
+                            if (onCompleted.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다." :
@@ -171,7 +171,7 @@ namespace UnityEngine.SceneSystem
                         else
                         {
 #if UNITY_EDITOR
-                            if (onLoading != null)
+                            if (onLoading.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다." :
@@ -179,7 +179,7 @@ namespace UnityEngine.SceneSystem
                                 Debug.LogWarning(msg);
                             }
                             
-                            if (onLoadCompleted != null)
+                            if (onLoadCompleted.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다." :
@@ -187,7 +187,7 @@ namespace UnityEngine.SceneSystem
                                 Debug.LogWarning(msg);
                             }
                             
-                            if (onCompleted != null)
+                            if (onCompleted.GetPersistentEventCount() > 0)
                             {
                                 string msg = Application.systemLanguage == SystemLanguage.Korean ?
                                     "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다." :
