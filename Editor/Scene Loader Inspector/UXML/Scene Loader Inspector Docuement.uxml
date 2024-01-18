@@ -8,7 +8,7 @@
     <uie:PropertyField name="property-SkipMode" binding-path="SkipMode" style="display: none;" />
     <uie:PropertyField name="property-MinimumLoadingTime" binding-path="MinimumLoadingTime" style="display: none;" />
     <uie:PropertyField name="property-DestroyOnCompleted" binding-path="DestroyOnCompleted" />
-    <ui:Foldout text="Events" value="false" style="-unity-font-style: bold;">
+    <ui:Foldout text="Events" value="false" name="property-Events" style="-unity-font-style: bold; display: none;">
         <uie:PropertyField name="property-onLoading" binding-path="onLoading" />
         <uie:PropertyField name="property-onLoadCompleted" binding-path="onLoadCompleted" />
         <uie:PropertyField name="property-onCompleted" binding-path="onCompleted" />

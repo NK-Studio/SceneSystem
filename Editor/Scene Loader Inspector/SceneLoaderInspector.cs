@@ -27,6 +27,7 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyAdditiveScenes;
         private PropertyField _propertySkipMode;
         private PropertyField _propertyMinimumLoadingTime;
+        private Foldout _propertyEvents;
 
         private void FindProperties()
         {
@@ -50,12 +51,13 @@ namespace UnityEditor.SceneSystem
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
             _propertySkipMode = _root.Q<PropertyField>("property-SkipMode");
             _propertyMinimumLoadingTime = _root.Q<PropertyField>("property-MinimumLoadingTime");
+            _propertyEvents = _root.Q<Foldout>("property-Events");
 
 #if !USE_SCENE_REFERENCE
             _propertyMainScene.label = "Load Scene Path";
             _propertyAdditiveScenes.label = "Additive Scenes Path";
 #endif
-            string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean?
+            string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean ?
                 "자동으로 씬을 로드 하는지 여부를 트리거합니다. (Editor 전용)" :
                 "Indicates whether the editor should load it automatically. (Editor Only)";
             _propertyEditorAutoLoad.tooltip = editorAutoLoadTooltip;
@@ -84,7 +86,7 @@ namespace UnityEditor.SceneSystem
             if (Application.isEditor && !Application.isPlaying)
             {
                 _root.schedule.Execute(() => {
-                    _propertyEditorAutoLoad.RegisterValueChangeCallback(evt => UpdateEditorAutoLoad(evt.changedProperty));    
+                    _propertyEditorAutoLoad.RegisterValueChangeCallback(evt => UpdateEditorAutoLoad(evt.changedProperty));
                 });
             }
 
@@ -104,6 +106,7 @@ namespace UnityEditor.SceneSystem
                     _propertySkipMode.style.display = DisplayStyle.Flex;
                     _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
                     _propertyEditorAutoLoad.style.display = DisplayStyle.None;
+                    _propertyEvents.style.display = DisplayStyle.Flex;
                     break;
                 case LoadSceneMode.Additive:
                     _propertyMainScene.style.display = DisplayStyle.None;
@@ -115,11 +118,13 @@ namespace UnityEditor.SceneSystem
                     {
                         _propertySkipMode.style.display = DisplayStyle.Flex;
                         _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+                        _propertyEvents.style.display = DisplayStyle.Flex;
                     }
                     else
                     {
                         _propertySkipMode.style.display = DisplayStyle.None;
                         _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
+                        _propertyEvents.style.display = DisplayStyle.None;
                     }
                     break;
                 default:
@@ -135,18 +140,24 @@ namespace UnityEditor.SceneSystem
             {
                 _propertySkipMode.style.display = DisplayStyle.Flex;
                 _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+
+                if (!_editorAutoLoadProperty.boolValue)
+                    _propertyEvents.style.display = DisplayStyle.Flex;
+                else
+                    _propertyEvents.style.display = DisplayStyle.None;
             }
             else
             {
                 _propertySkipMode.style.display = DisplayStyle.None;
                 _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
+                _propertyEvents.style.display = DisplayStyle.None;
             }
         }
 
         private void UpdateEditorAutoLoad(SerializedProperty evtChangedProperty)
         {
             bool editorAutoLoad = evtChangedProperty.boolValue;
-            
+
             if (editorAutoLoad)
             {
 #if USE_SCENE_REFERENCE
@@ -176,6 +187,7 @@ namespace UnityEditor.SceneSystem
                     }
                 }
 #endif
+                _propertyEvents.style.display = DisplayStyle.None;
             }
             else
             {
@@ -204,6 +216,9 @@ namespace UnityEditor.SceneSystem
                     }
                 }
 #endif
+
+                if (_useAsyncProperty.boolValue)
+                    _propertyEvents.style.display = DisplayStyle.Flex;
             }
         }
     }

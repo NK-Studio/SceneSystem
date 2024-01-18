@@ -140,6 +140,36 @@ namespace UnityEngine.SceneSystem
                             else
                                 Scenes.LoadScenes(additiveScenes);
                         }
+                        else
+                        {
+#if UNITY_EDITOR
+                            if (onLoading != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다." :
+                                    "OnLoading event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+                            
+                            if (onLoadCompleted != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다." :
+                                    "OnLoadCompleted event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+                            
+                            if (onCompleted != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다." :
+                                    "OnCompleted event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+#endif
+                            if (DestroyOnCompleted)
+                                Destroy(gameObject);
+                        }
 #endif
                     }
                     break;
@@ -176,6 +206,7 @@ namespace UnityEngine.SceneSystem
                 if (!_callOnCompleted && progress >= 1f)
                 {
                     _callOnCompleted = true;
+                    
                     onLoadCompleted?.Invoke();
 
                     if (SkipMode == LoadingActionSkipMode.InstantComplete)
