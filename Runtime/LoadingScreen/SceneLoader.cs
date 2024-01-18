@@ -117,7 +117,7 @@ namespace UnityEngine.SceneSystem
                         bool preCheck = false;
                         if (Application.isEditor && Application.isPlaying)
                             preCheck = CheckAllLoadAdditiveScene();
-                        
+
 #if USE_SCENE_REFERENCE
                         if (additiveScenes.Any(sceneReference => string.IsNullOrEmpty(sceneReference.Path)))
                             return;
@@ -127,7 +127,35 @@ namespace UnityEngine.SceneSystem
                             if (UseAsync)
                                 Scenes.LoadScenesAsync(additiveScenes).WithLoadingScreen(this);
                             else
-                                Scenes.LoadScenes(additiveScenes);     
+                                Scenes.LoadScenes(additiveScenes);
+                        }
+                        else
+                        {
+#if UNITY_EDITOR
+                            if (onLoading != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다." :
+                                    "OnLoading event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+
+                            if (onLoadCompleted != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다." :
+                                    "OnLoadCompleted event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+
+                            if (onCompleted != null)
+                            {
+                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
+                                    "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다." :
+                                    "OnCompleted event is not called when Editor Auto Load is turned on.";
+                                Debug.LogWarning(msg);
+                            }
+#endif
                         }
 #else
                         if (additiveScenes.Any(string.IsNullOrEmpty))
@@ -167,8 +195,6 @@ namespace UnityEngine.SceneSystem
                                 Debug.LogWarning(msg);
                             }
 #endif
-                            if (DestroyOnCompleted)
-                                Destroy(gameObject);
                         }
 #endif
                     }
@@ -206,7 +232,7 @@ namespace UnityEngine.SceneSystem
                 if (!_callOnCompleted && progress >= 1f)
                 {
                     _callOnCompleted = true;
-                    
+
                     onLoadCompleted?.Invoke();
 
                     if (SkipMode == LoadingActionSkipMode.InstantComplete)
@@ -352,10 +378,10 @@ namespace UnityEngine.SceneSystem
         private bool CheckAllLoadAdditiveScene()
         {
 #if UNITY_EDITOR
-            
+
             if (LoadStyle == LoadSceneMode.Single)
                 return false;
-            
+
             // additiveScenes가 모두 로드되어있는지 체크
             bool[] isLoaded = new bool[additiveScenes.Length];
 

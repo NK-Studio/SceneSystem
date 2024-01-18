@@ -27,6 +27,7 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyAdditiveScenes;
         private PropertyField _propertySkipMode;
         private PropertyField _propertyMinimumLoadingTime;
+        private PropertyField _propertyDestroyOnCompleted;
         private Foldout _propertyEvents;
 
         private void FindProperties()
@@ -51,6 +52,7 @@ namespace UnityEditor.SceneSystem
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
             _propertySkipMode = _root.Q<PropertyField>("property-SkipMode");
             _propertyMinimumLoadingTime = _root.Q<PropertyField>("property-MinimumLoadingTime");
+            _propertyDestroyOnCompleted = _root.Q<PropertyField>("property-DestroyOnCompleted");
             _propertyEvents = _root.Q<Foldout>("property-Events");
 
 #if !USE_SCENE_REFERENCE
@@ -107,6 +109,7 @@ namespace UnityEditor.SceneSystem
                     _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
                     _propertyEditorAutoLoad.style.display = DisplayStyle.None;
                     _propertyEvents.style.display = DisplayStyle.Flex;
+                    _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
                     break;
                 case LoadSceneMode.Additive:
                     _propertyMainScene.style.display = DisplayStyle.None;
@@ -119,12 +122,14 @@ namespace UnityEditor.SceneSystem
                         _propertySkipMode.style.display = DisplayStyle.Flex;
                         _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
                         _propertyEvents.style.display = DisplayStyle.Flex;
+                        _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
                     }
                     else
                     {
                         _propertySkipMode.style.display = DisplayStyle.None;
                         _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
                         _propertyEvents.style.display = DisplayStyle.None;
+                        _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
                     }
                     break;
                 default:
@@ -140,6 +145,7 @@ namespace UnityEditor.SceneSystem
             {
                 _propertySkipMode.style.display = DisplayStyle.Flex;
                 _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+                _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
 
                 if (!_editorAutoLoadProperty.boolValue)
                     _propertyEvents.style.display = DisplayStyle.Flex;
@@ -151,6 +157,7 @@ namespace UnityEditor.SceneSystem
                 _propertySkipMode.style.display = DisplayStyle.None;
                 _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
                 _propertyEvents.style.display = DisplayStyle.None;
+                _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
             }
         }
 
