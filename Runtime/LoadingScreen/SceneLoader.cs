@@ -32,7 +32,7 @@ namespace UnityEngine.SceneSystem
         /// </summary>
         [Tooltip("Indicates whether the editor should load it automatically. (Editor Only)")]
         [SerializeField]
-        private bool editorAutoLoad = true;
+        private bool editorAutoLoad;
 #endif
 
 #if USE_SCENE_REFERENCE
