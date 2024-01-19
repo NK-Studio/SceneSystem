@@ -449,9 +449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreenPrefab: {fileID: 8489698749272279252, guid: ce099565e41c34348a1b06729931c114, type: 3}
-  sceneReference:
-    sceneAsset: {fileID: 102900000, guid: 9a9cffe88a8e743e781fc0e4911a5c1e, type: 3}
-    path: Assets/SceneSystem/Samples/LoadingScreenSample/Scenes/LoadingScreenSample1.unity
+  scenePath: Assets/Plugins/SceneSystem/Samples/LoadingScreenSample/Scenes/LoadingScreenSample1.unity
 --- !u!4 &658593360
 Transform:
   m_ObjectHideFlags: 0
