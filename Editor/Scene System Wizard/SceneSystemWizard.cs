@@ -64,7 +64,11 @@ public class SceneSystemWizard : EditorWindow
         _stateText = root.Q<Label>("text-install");
 
         // set ui
-        showAtStartupToggle.value = EditorPrefs.GetBool(Key, true);
+        if (EditorPrefs.HasKey(Key))
+            showAtStartupToggle.value = EditorPrefs.GetBool(Key, true);
+        else
+            showAtStartupToggle.value = true;
+
         infoHelpBox.text = "Scene System requires Scene Reference.";
         versionLabel.text = "Version : " + GetVersion();
 
