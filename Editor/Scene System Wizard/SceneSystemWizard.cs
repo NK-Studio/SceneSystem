@@ -8,8 +8,6 @@ using UnityEngine.UIElements;
 
 public class SceneSystemWizard : EditorWindow
 {
-    [SerializeField] private VisualTreeAsset visualTreeAsset;
-
     private const string StateText = "State : ";
     private const string TargetPackage = "com.nkstudio.scenereference";
     
@@ -20,6 +18,8 @@ public class SceneSystemWizard : EditorWindow
 
     private Label _stateText;
     private Button _installButton;
+    private VisualTreeAsset _visualTreeAsset;
+    private StyleSheet _styleSheet;
 
     [MenuItem("Tools/Scene System/Scene System Wizard")]
     public static void SceneSystemWizardWindow()
@@ -51,9 +51,16 @@ public class SceneSystemWizard : EditorWindow
 
     public void CreateGUI()
     {
+        var uxmlPath = AssetDatabase.GUIDToAssetPath("71896090f23f949f99b4fbaa246e3eb8");
+        var styleSheetPath = AssetDatabase.GUIDToAssetPath("67fabc1e7bed84cd198380b225ad2e41");
+        
+        _visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
+        _styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(styleSheetPath);
+        
         // init root
         VisualElement root = rootVisualElement;
-        visualTreeAsset.CloneTree(root);
+        _visualTreeAsset.CloneTree(root);
+        root.styleSheets.Add(_styleSheet);
 
         // load ui
         Label versionLabel = root.Q<Label>("label-version");
