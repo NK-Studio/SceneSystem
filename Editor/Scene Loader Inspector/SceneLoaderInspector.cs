@@ -40,8 +40,8 @@ namespace UnityEditor.SceneSystem
 
         private void InitElement()
         {
-            string path = AssetDatabase.GUIDToAssetPath("7524bf6ef64eb47bd98b6cb1b69ba7ef");
-            VisualTreeAsset uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+            string uxmlPath = AssetDatabase.GUIDToAssetPath("7524bf6ef64eb47bd98b6cb1b69ba7ef");
+            VisualTreeAsset uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
             _root = new VisualElement();
             uxml.CloneTree(_root);
 
@@ -59,9 +59,9 @@ namespace UnityEditor.SceneSystem
             _propertyMainScene.label = "Load Scene Path";
             _propertyAdditiveScenes.label = "Additive Scenes Path";
 #endif
-            string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean ?
-                "자동으로 씬을 로드 하는지 여부를 트리거합니다. (Editor 전용)" :
-                "Indicates whether the editor should load it automatically. (Editor Only)";
+            string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean
+                ? "자동으로 씬을 로드 하는지 여부를 트리거합니다. (Editor 전용)"
+                : "Indicates whether the editor should load it automatically. (Editor Only)";
             _propertyEditorAutoLoad.tooltip = editorAutoLoadTooltip;
 
             if (Application.isPlaying)
@@ -82,15 +82,16 @@ namespace UnityEditor.SceneSystem
             InitElement();
 
             UpdateLoadStyle(_loadStyleProperty);
-            _propertyLoadStyle.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
-            _propertyUseAsync.RegisterValueChangeCallback(evt => UpdateUseAsync(evt.changedProperty));
-
-            if (Application.isEditor && !Application.isPlaying)
+            
+            _root.schedule.Execute(() =>
             {
-                _root.schedule.Execute(() => {
-                    _propertyEditorAutoLoad.RegisterValueChangeCallback(evt => UpdateEditorAutoLoad(evt.changedProperty));
-                });
-            }
+                _propertyLoadStyle.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
+                _propertyUseAsync.RegisterValueChangeCallback(evt => UpdateUseAsync(evt.changedProperty));
+
+                if (Application.isEditor && !Application.isPlaying)
+                    _propertyEditorAutoLoad.RegisterValueChangeCallback(evt =>
+                        UpdateEditorAutoLoad(evt.changedProperty));
+            });
 
             return _root;
         }
@@ -131,6 +132,7 @@ namespace UnityEditor.SceneSystem
                         _propertyEvents.style.display = DisplayStyle.None;
                         _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -172,7 +174,8 @@ namespace UnityEditor.SceneSystem
                 {
                     for (int i = 0; i < _additiveScenesProperty.arraySize; i++)
                     {
-                        string targetScene = _additiveScenesProperty.GetArrayElementAtIndex(i).FindPropertyRelative("path").stringValue;
+                        string targetScene = _additiveScenesProperty.GetArrayElementAtIndex(i)
+                            .FindPropertyRelative("path").stringValue;
 
                         if (!string.IsNullOrWhiteSpace(targetScene))
                         {
@@ -201,10 +204,10 @@ namespace UnityEditor.SceneSystem
 #if USE_SCENE_REFERENCE
                 if (_additiveScenesProperty.arraySize > 0)
                 {
-
                     for (int i = 0; i < _additiveScenesProperty.arraySize; i++)
                     {
-                        string targetScene = _additiveScenesProperty.GetArrayElementAtIndex(i).FindPropertyRelative("path").stringValue;
+                        string targetScene = _additiveScenesProperty.GetArrayElementAtIndex(i)
+                            .FindPropertyRelative("path").stringValue;
 
                         if (SceneManager.GetSceneByPath(targetScene).isLoaded)
                             EditorSceneManager.CloseScene(SceneManager.GetSceneByPath(targetScene), true);
