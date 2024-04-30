@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 #if ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -73,6 +74,10 @@ namespace UnityEngine.SceneSystem
         [Tooltip(
             "During the minimum loading time, the loading screen will remain visible even after loading is complete.")]
         public float MinimumLoadingTime;
+        
+        [Tooltip(
+            "It does not load Async, and when AllowCompletion() is called, it is processed as LoadScene. (Single Only)")]
+        public bool DontUseAsync;
 
         [Tooltip("If true, it will be automatically deleted upon completion.")]
         public bool DestroyOnCompleted;
@@ -95,6 +100,11 @@ namespace UnityEngine.SceneSystem
 
         public void AllowCompletion()
         {
+            if (LoadStyle == LoadSceneMode.Single)
+                if (SkipMode == LoadingActionSkipMode.Manual)
+                    if (DontUseAsync)
+                        _callOnCompleted = true;
+            
             _allowCompletion = true;
         }
 
@@ -123,13 +133,17 @@ namespace UnityEngine.SceneSystem
             switch (LoadStyle)
             {
                 case LoadSceneMode.Single:
+                    if (!DontUseAsync)
+                    {
 #if USE_SCENE_REFERENCE
-                    if (!string.IsNullOrEmpty(loadScene.Path))
-                        Scenes.LoadSceneAsync(loadScene).WithLoadingScreen(this);
+                        if (!string.IsNullOrEmpty(loadScene.Path))
+                            Scenes.LoadSceneAsync(loadScene).WithLoadingScreen(this);
 #else
                     if (!string.IsNullOrEmpty(loadScene))
                         Scenes.LoadSceneAsync(loadScene).WithLoadingScreen(this);
 #endif
+                    }
+
                     break;
                 case LoadSceneMode.Additive:
                     if (additiveScenes.Length > 0)
@@ -312,11 +326,21 @@ namespace UnityEngine.SceneSystem
 #endif
                     break;
             }
-
+            
             if (_allowCompletion)
             {
-                _handle.AllowSceneActivation(true);
-                _handle.onCompleted += () => { CallOnCompletedEvent(); };
+                if (DontUseAsync)
+                {
+                    CallOnCompletedEvent();
+
+                    if (!string.IsNullOrEmpty(loadScene.Path)) 
+                        Scenes.LoadScene(loadScene);
+                }
+                else
+                {
+                    _handle.AllowSceneActivation(true);
+                    _handle.onCompleted += CallOnCompletedEvent;
+                }
             }
         }
 

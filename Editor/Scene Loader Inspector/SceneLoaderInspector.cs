@@ -22,15 +22,16 @@ namespace UnityEditor.SceneSystem
         private SerializedProperty _skipModeProperty;
         private SerializedProperty _skipKeyProperty;
 
-        private PropertyField _propertyLoadStyle;
-        private PropertyField _propertyUseAsync;
-        private PropertyField _propertyMainScene;
-        private PropertyField _propertyEditorAutoLoad;
-        private PropertyField _propertyAdditiveScenes;
-        private PropertyField _propertySkipMode;
-        private PropertyField _propertySkipKey;
-        private PropertyField _propertyMinimumLoadingTime;
-        private PropertyField _propertyDestroyOnCompleted;
+        private PropertyField _loadStylePropertyField;
+        private PropertyField _useAsyncPropertyField;
+        private PropertyField _mainScenePropertyField;
+        private PropertyField _editorAutoLoadPropertyField;
+        private PropertyField _additiveScenesPropertyField;
+        private PropertyField _skipModePropertyField;
+        private PropertyField _skipKeyPropertyField;
+        private PropertyField _minimumLoadingTimePropertyField;
+        private PropertyField _destroyOnCompletedPropertyField;
+        private PropertyField _dontUseAsyncPropertyField;
         private Foldout _propertyEvents;
 
         private void FindProperties()
@@ -55,19 +56,20 @@ namespace UnityEditor.SceneSystem
             _root = new VisualElement();
             uxml.CloneTree(_root);
 
-            _propertyLoadStyle = _root.Q<PropertyField>("property-LoadStyle");
-            _propertyUseAsync = _root.Q<PropertyField>("property-UseAsync");
-            _propertyMainScene = _root.Q<PropertyField>("property-LoadScene");
-            _propertyEditorAutoLoad = _root.Q<PropertyField>("property-EditorAutoLoad");
-            _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
-            _propertySkipMode = _root.Q<PropertyField>("property-SkipMode");
-            _propertySkipKey = _root.Q<PropertyField>("property-SkipKey");
-            _propertyMinimumLoadingTime = _root.Q<PropertyField>("property-MinimumLoadingTime");
-            _propertyDestroyOnCompleted = _root.Q<PropertyField>("property-DestroyOnCompleted");
+            _loadStylePropertyField = _root.Q<PropertyField>("property-LoadStyle");
+            _useAsyncPropertyField = _root.Q<PropertyField>("property-UseAsync");
+            _mainScenePropertyField = _root.Q<PropertyField>("property-LoadScene");
+            _editorAutoLoadPropertyField = _root.Q<PropertyField>("property-EditorAutoLoad");
+            _additiveScenesPropertyField = _root.Q<PropertyField>("property-AdditiveScenes");
+            _skipModePropertyField = _root.Q<PropertyField>("property-SkipMode");
+            _skipKeyPropertyField = _root.Q<PropertyField>("property-SkipKey");
+            _minimumLoadingTimePropertyField = _root.Q<PropertyField>("property-MinimumLoadingTime");
+            _destroyOnCompletedPropertyField = _root.Q<PropertyField>("property-DestroyOnCompleted");
+            _dontUseAsyncPropertyField = _root.Q<PropertyField>("property-DontUseAsync");
             _propertyEvents = _root.Q<Foldout>("property-Events");
 
-            _propertySkipKey.BindProperty(_skipKeyProperty);
-            
+            _skipKeyPropertyField.BindProperty(_skipKeyProperty);
+
 #if !USE_SCENE_REFERENCE
             _propertyMainScene.label = "Load Scene Path";
             _propertyAdditiveScenes.label = "Additive Scenes Path";
@@ -75,10 +77,10 @@ namespace UnityEditor.SceneSystem
             string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean
                 ? "자동으로 씬을 로드 하는지 여부를 트리거합니다. (Editor 전용)"
                 : "Indicates whether the editor should load it automatically. (Editor Only)";
-            _propertyEditorAutoLoad.tooltip = editorAutoLoadTooltip;
+            _editorAutoLoadPropertyField.tooltip = editorAutoLoadTooltip;
 
             if (Application.isPlaying)
-                _propertyEditorAutoLoad.SetEnabled(false);
+                _editorAutoLoadPropertyField.SetEnabled(false);
         }
 
         private void ChangeIcon()
@@ -95,18 +97,43 @@ namespace UnityEditor.SceneSystem
             InitElement();
 
             UpdateLoadStyle(_loadStyleProperty);
+            UpdateSkipMode(_skipModeProperty); 
 
             _root.schedule.Execute(() =>
             {
-                _propertyLoadStyle.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
-                _propertyUseAsync.RegisterValueChangeCallback(evt => UpdateUseAsync(evt.changedProperty));
+                _skipModePropertyField.RegisterValueChangeCallback(evt => UpdateSkipMode(evt.changedProperty));
+                _loadStylePropertyField.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
+                _useAsyncPropertyField.RegisterValueChangeCallback(evt => UpdateUseAsync(evt.changedProperty));
 
                 if (Application.isEditor && !Application.isPlaying)
-                    _propertyEditorAutoLoad.RegisterValueChangeCallback(evt =>
+                    _editorAutoLoadPropertyField.RegisterValueChangeCallback(evt =>
                         UpdateEditorAutoLoad(evt.changedProperty));
             });
 
             return _root;
+        }
+
+        private void UpdateSkipMode(SerializedProperty serializedProperty)
+        {
+            LoadingActionSkipMode skipMode = (LoadingActionSkipMode)serializedProperty.intValue;
+
+            switch (skipMode)
+            {
+                case LoadingActionSkipMode.InstantComplete:
+                    _skipKeyPropertyField.style.display = DisplayStyle.None;
+                    break;
+                case LoadingActionSkipMode.KeyDown:
+                    _skipKeyPropertyField.style.display = DisplayStyle.Flex;
+                    break;
+                case LoadingActionSkipMode.AnyKey:
+                    _skipKeyPropertyField.style.display = DisplayStyle.None;
+                    break;
+                case LoadingActionSkipMode.Manual:
+                    _skipKeyPropertyField.style.display = DisplayStyle.None;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void UpdateLoadStyle(SerializedProperty serializedProperty)
@@ -116,44 +143,36 @@ namespace UnityEditor.SceneSystem
             switch (loadStyle)
             {
                 case LoadSceneMode.Single:
-                    _propertyMainScene.style.display = DisplayStyle.Flex;
-                    _propertyAdditiveScenes.style.display = DisplayStyle.None;
-                    _propertyUseAsync.style.display = DisplayStyle.None;
-                    _propertySkipMode.style.display = DisplayStyle.Flex;
-
-                    if (_skipModeProperty.intValue == 1)
-                    {
-                        _propertySkipKey.style.display = DisplayStyle.Flex;
-                    }
-                    else
-                    {
-                        _propertySkipKey.style.display = DisplayStyle.None;
-                    }
-                    
-                    _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
-                    _propertyEditorAutoLoad.style.display = DisplayStyle.None;
+                    _mainScenePropertyField.style.display = DisplayStyle.Flex;
+                    _additiveScenesPropertyField.style.display = DisplayStyle.None;
+                    _useAsyncPropertyField.style.display = DisplayStyle.None;
+                    _skipModePropertyField.style.display = DisplayStyle.Flex;
+                    _minimumLoadingTimePropertyField.style.display = DisplayStyle.Flex;
+                    _dontUseAsyncPropertyField.style.display = DisplayStyle.Flex;
+                    _editorAutoLoadPropertyField.style.display = DisplayStyle.None;
                     _propertyEvents.style.display = DisplayStyle.Flex;
-                    _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
+                    _destroyOnCompletedPropertyField.style.display = DisplayStyle.Flex;
                     break;
                 case LoadSceneMode.Additive:
-                    _propertyMainScene.style.display = DisplayStyle.None;
-                    _propertyAdditiveScenes.style.display = DisplayStyle.Flex;
-                    _propertyUseAsync.style.display = DisplayStyle.Flex;
-                    _propertyEditorAutoLoad.style.display = DisplayStyle.Flex;
+                    _mainScenePropertyField.style.display = DisplayStyle.None;
+                    _additiveScenesPropertyField.style.display = DisplayStyle.Flex;
+                    _useAsyncPropertyField.style.display = DisplayStyle.Flex;
+                    _editorAutoLoadPropertyField.style.display = DisplayStyle.Flex;
+                    _dontUseAsyncPropertyField.style.display = DisplayStyle.None;
 
                     if (_useAsyncProperty.boolValue)
                     {
-                        _propertySkipMode.style.display = DisplayStyle.Flex;
-                        _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
+                        _skipModePropertyField.style.display = DisplayStyle.Flex;
+                        _minimumLoadingTimePropertyField.style.display = DisplayStyle.Flex;
                         _propertyEvents.style.display = DisplayStyle.Flex;
-                        _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
+                        _destroyOnCompletedPropertyField.style.display = DisplayStyle.Flex;
                     }
                     else
                     {
-                        _propertySkipMode.style.display = DisplayStyle.None;
-                        _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
+                        _skipModePropertyField.style.display = DisplayStyle.None;
+                        _minimumLoadingTimePropertyField.style.display = DisplayStyle.None;
                         _propertyEvents.style.display = DisplayStyle.None;
-                        _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
+                        _destroyOnCompletedPropertyField.style.display = DisplayStyle.None;
                     }
 
                     break;
@@ -168,9 +187,9 @@ namespace UnityEditor.SceneSystem
 
             if (useAsync)
             {
-                _propertySkipMode.style.display = DisplayStyle.Flex;
-                _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
-                _propertyDestroyOnCompleted.style.display = DisplayStyle.Flex;
+                _skipModePropertyField.style.display = DisplayStyle.Flex;
+                _minimumLoadingTimePropertyField.style.display = DisplayStyle.Flex;
+                _destroyOnCompletedPropertyField.style.display = DisplayStyle.Flex;
 
                 if (!_editorAutoLoadProperty.boolValue)
                     _propertyEvents.style.display = DisplayStyle.Flex;
@@ -179,10 +198,10 @@ namespace UnityEditor.SceneSystem
             }
             else
             {
-                _propertySkipMode.style.display = DisplayStyle.None;
-                _propertyMinimumLoadingTime.style.display = DisplayStyle.None;
+                _skipModePropertyField.style.display = DisplayStyle.None;
+                _minimumLoadingTimePropertyField.style.display = DisplayStyle.None;
                 _propertyEvents.style.display = DisplayStyle.None;
-                _propertyDestroyOnCompleted.style.display = DisplayStyle.None;
+                _destroyOnCompletedPropertyField.style.display = DisplayStyle.None;
             }
         }
 
