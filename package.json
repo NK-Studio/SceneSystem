@@ -1,6 +1,6 @@
 {
   "name": "com.unity.scene-system",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "displayName": "Scene System",
   "description": "Provides efficient and versatile scene management functionality for Unity.",
   "unity": "2021.3",

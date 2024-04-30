@@ -1,4 +1,8 @@
 # Changelog
+## [1.0.3] - 2024-04-30
+# Fixed
+- Code fixes to improve stability and performance.
+
 ## [1.0.2] - 2024-04-30
 # Added
 - Added scene switching function through Keydown in Scene Loader.
