@@ -6,6 +6,7 @@
     <uie:PropertyField name="property-AdditiveScenes" binding-path="additiveScenes" style="display: none;" />
     <uie:PropertyField binding-path="UseAsync" name="property-UseAsync" style="display: none;" />
     <uie:PropertyField name="property-SkipMode" binding-path="SkipMode" style="display: none;" />
+    <uie:PropertyField name="property-SkipKey" style="display: none;" />
     <uie:PropertyField name="property-MinimumLoadingTime" binding-path="MinimumLoadingTime" style="display: none;" />
     <uie:PropertyField name="property-DestroyOnCompleted" binding-path="DestroyOnCompleted" style="display: none;" />
     <ui:Foldout text="Events" value="false" name="property-Events" style="-unity-font-style: bold; display: none;">

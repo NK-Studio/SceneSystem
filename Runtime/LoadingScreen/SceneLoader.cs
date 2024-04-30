@@ -30,8 +30,7 @@ namespace UnityEngine.SceneSystem
         /// <summary>
         /// Indicates whether the editor should load it automatically. (Editor Only)
         /// </summary>
-        [Tooltip("Indicates whether the editor should load it automatically. (Editor Only)")]
-        [SerializeField]
+        [Tooltip("Indicates whether the editor should load it automatically. (Editor Only)")] [SerializeField]
         private bool editorAutoLoad;
 #endif
 
@@ -39,14 +38,12 @@ namespace UnityEngine.SceneSystem
         /// <summary>
         /// Scene to load.
         /// </summary>
-        [SerializeField]
-        private SceneReference loadScene;
+        [SerializeField] private SceneReference loadScene;
 
         /// <summary>
         /// Additive scenes to load.
         /// </summary>
-        [SerializeField]
-        private SceneReference[] additiveScenes;
+        [SerializeField] private SceneReference[] additiveScenes;
 #else
         /// <summary>
         /// Scene to load.
@@ -66,8 +63,15 @@ namespace UnityEngine.SceneSystem
         /// </summary>
         public LoadingActionSkipMode SkipMode;
 
+#if ENABLE_LEGACY_INPUT_MANAGER
+        public KeyCode SkipKey = KeyCode.Space;
+#elif ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
+        public InputAction SkipAction;
+#endif
+
         [Range(0f, 10f)]
-        [Tooltip("During the minimum loading time, the loading screen will remain visible even after loading is complete.")]
+        [Tooltip(
+            "During the minimum loading time, the loading screen will remain visible even after loading is complete.")]
         public float MinimumLoadingTime;
 
         [Tooltip("If true, it will be automatically deleted upon completion.")]
@@ -75,8 +79,10 @@ namespace UnityEngine.SceneSystem
 
         [Space(5), Tooltip("Called during loading. (MinimumLoadingTime must be greater than 0.)")]
         public UnityEvent<float> onLoading;
+
         [Space(5), Tooltip("Called when the loading is complete.")]
         public UnityEvent onLoadCompleted;
+
         [Space(5), Tooltip("Called when the loading screen is completed.")]
         public UnityEvent onCompleted;
 
@@ -91,6 +97,20 @@ namespace UnityEngine.SceneSystem
         {
             _allowCompletion = true;
         }
+
+#if !ENABLE_LEGACY_INPUT_MANAGER && ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
+        private void OnEnable()
+        {
+            SkipAction.Enable();
+        }
+#endif
+
+#if !ENABLE_LEGACY_INPUT_MANAGER && ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
+        private void OnDisable()
+        {
+            SkipAction.Disable();
+        }
+#endif
 
         private void Start()
         {
@@ -134,25 +154,25 @@ namespace UnityEngine.SceneSystem
 #if UNITY_EDITOR
                             if (onLoading.GetPersistentEventCount() > 0)
                             {
-                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
-                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다." :
-                                    "OnLoading event is not called when Editor Auto Load is turned on.";
+                                string msg = Application.systemLanguage == SystemLanguage.Korean
+                                    ? "Editor Auto Load가 켜져있는 상태에서는 OnLoading 이벤트가 호출되지 않습니다."
+                                    : "OnLoading event is not called when Editor Auto Load is turned on.";
                                 Debug.LogWarning(msg);
                             }
 
                             if (onLoadCompleted.GetPersistentEventCount() > 0)
                             {
-                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
-                                    "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다." :
-                                    "OnLoadCompleted event is not called when Editor Auto Load is turned on.";
+                                string msg = Application.systemLanguage == SystemLanguage.Korean
+                                    ? "Editor Auto Load가 켜져있는 상태에서는 OnLoadCompleted 이벤트가 호출되지 않습니다."
+                                    : "OnLoadCompleted event is not called when Editor Auto Load is turned on.";
                                 Debug.LogWarning(msg);
                             }
 
                             if (onCompleted.GetPersistentEventCount() > 0)
                             {
-                                string msg = Application.systemLanguage == SystemLanguage.Korean ?
-                                    "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다." :
-                                    "OnCompleted event is not called when Editor Auto Load is turned on.";
+                                string msg = Application.systemLanguage == SystemLanguage.Korean
+                                    ? "Editor Auto Load가 켜져있는 상태에서는 OnCompleted 이벤트가 호출되지 않습니다."
+                                    : "OnCompleted event is not called when Editor Auto Load is turned on.";
                                 Debug.LogWarning(msg);
                             }
 #endif
@@ -198,6 +218,7 @@ namespace UnityEngine.SceneSystem
                         }
 #endif
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -244,46 +265,58 @@ namespace UnityEngine.SceneSystem
 
             if (!_callOnCompleted) return;
 
-            if (SkipMode == LoadingActionSkipMode.AnyKey)
+            switch (SkipMode)
             {
+                case LoadingActionSkipMode.KeyDown:
 #if ENABLE_LEGACY_INPUT_MANAGER
-                if (Input.anyKeyDown) AllowCompletion();
+                    if (Input.GetKeyDown(SkipKey))
+                        AllowCompletion();
+#elif ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
+                    if (SkipAction.WasPressedThisFrame())
+                        AllowCompletion();
+#endif
+                    break;
+                case LoadingActionSkipMode.AnyKey:
+#if ENABLE_LEGACY_INPUT_MANAGER
+                    if (Input.anyKeyDown) AllowCompletion();
 #endif
 #if ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
-                if (Keyboard.current != null &&
-                    Keyboard.current.anyKey.wasPressedThisFrame)
-                {
-                    AllowCompletion();
-                }
-                if (Mouse.current != null &&
-                    (Mouse.current.leftButton.wasPressedThisFrame || 
-                     Mouse.current.rightButton.wasPressedThisFrame ||
-                     Mouse.current.middleButton.wasPressedThisFrame))
-                {
-                    AllowCompletion();
-                }
-                if (Gamepad.current != null &&
-                    (Gamepad.current.buttonNorth.wasPressedThisFrame ||
-                    Gamepad.current.buttonSouth.wasPressedThisFrame ||
-                    Gamepad.current.buttonWest.wasPressedThisFrame ||
-                    Gamepad.current.buttonEast.wasPressedThisFrame))
-                {
-                    AllowCompletion();
-                }
-                if (Touchscreen.current != null &&
-                    Touchscreen.current.primaryTouch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
-                {
-                    AllowCompletion();
-                }
+                    if (Keyboard.current != null &&
+                        Keyboard.current.anyKey.wasPressedThisFrame)
+                    {
+                        AllowCompletion();
+                    }
+
+                    if (Mouse.current != null &&
+                        (Mouse.current.leftButton.wasPressedThisFrame ||
+                         Mouse.current.rightButton.wasPressedThisFrame ||
+                         Mouse.current.middleButton.wasPressedThisFrame))
+                    {
+                        AllowCompletion();
+                    }
+
+                    if (Gamepad.current != null &&
+                        (Gamepad.current.buttonNorth.wasPressedThisFrame ||
+                         Gamepad.current.buttonSouth.wasPressedThisFrame ||
+                         Gamepad.current.buttonWest.wasPressedThisFrame ||
+                         Gamepad.current.buttonEast.wasPressedThisFrame))
+                    {
+                        AllowCompletion();
+                    }
+
+                    if (Touchscreen.current != null &&
+                        Touchscreen.current.primaryTouch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
+                    {
+                        AllowCompletion();
+                    }
 #endif
+                    break;
             }
 
             if (_allowCompletion)
             {
                 _handle.AllowSceneActivation(true);
-                _handle.onCompleted += () => {
-                    CallOnCompletedEvent();
-                };
+                _handle.onCompleted += () => { CallOnCompletedEvent(); };
             }
         }
 
@@ -425,6 +458,7 @@ namespace UnityEngine.SceneSystem
     public enum LoadingActionSkipMode
     {
         InstantComplete,
+        KeyDown,
         AnyKey,
         Manual
     }

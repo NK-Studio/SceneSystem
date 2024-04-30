@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "GUID:1fccaaf8fdf894b1db5e4c040178ba9f",
-        "GUID:09bad806721a64355b6b12c680073a87"
+        "GUID:09bad806721a64355b6b12c680073a87",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,6 +20,11 @@
             "name": "com.nkstudio.scenereference",
             "expression": "",
             "define": "USE_SCENE_REFERENCE"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "",
+            "define": "SCENESYSTEM_SUPPORT_INPUTSYSTEM"
         }
     ],
     "noEngineReferences": false

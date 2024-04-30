@@ -1,4 +1,8 @@
 # Changelog
+## [1.0.2] - 2024-04-30
+# Added
+- Added scene switching function through Keydown in Scene Loader.
+
 ## [1.0.1] - 2024-04-28
 # Fixed
 - Fixed SceneSystem not working in 2022.3 LTS.

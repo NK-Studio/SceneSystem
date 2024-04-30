@@ -19,6 +19,8 @@ namespace UnityEditor.SceneSystem
         private SerializedProperty _loadStyleProperty;
         private SerializedProperty _useAsyncProperty;
         private SerializedProperty _additiveScenesProperty;
+        private SerializedProperty _skipModeProperty;
+        private SerializedProperty _skipKeyProperty;
 
         private PropertyField _propertyLoadStyle;
         private PropertyField _propertyUseAsync;
@@ -26,6 +28,7 @@ namespace UnityEditor.SceneSystem
         private PropertyField _propertyEditorAutoLoad;
         private PropertyField _propertyAdditiveScenes;
         private PropertyField _propertySkipMode;
+        private PropertyField _propertySkipKey;
         private PropertyField _propertyMinimumLoadingTime;
         private PropertyField _propertyDestroyOnCompleted;
         private Foldout _propertyEvents;
@@ -36,6 +39,13 @@ namespace UnityEditor.SceneSystem
             _additiveScenesProperty = serializedObject.FindProperty("additiveScenes");
             _loadStyleProperty = serializedObject.FindProperty("LoadStyle");
             _useAsyncProperty = serializedObject.FindProperty("UseAsync");
+            _skipModeProperty = serializedObject.FindProperty("SkipMode");
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            _skipKeyProperty = serializedObject.FindProperty("SkipKey");
+#elif ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
+            _skipKeyProperty = serializedObject.FindProperty("SkipAction");
+#endif
         }
 
         private void InitElement()
@@ -51,10 +61,13 @@ namespace UnityEditor.SceneSystem
             _propertyEditorAutoLoad = _root.Q<PropertyField>("property-EditorAutoLoad");
             _propertyAdditiveScenes = _root.Q<PropertyField>("property-AdditiveScenes");
             _propertySkipMode = _root.Q<PropertyField>("property-SkipMode");
+            _propertySkipKey = _root.Q<PropertyField>("property-SkipKey");
             _propertyMinimumLoadingTime = _root.Q<PropertyField>("property-MinimumLoadingTime");
             _propertyDestroyOnCompleted = _root.Q<PropertyField>("property-DestroyOnCompleted");
             _propertyEvents = _root.Q<Foldout>("property-Events");
 
+            _propertySkipKey.BindProperty(_skipKeyProperty);
+            
 #if !USE_SCENE_REFERENCE
             _propertyMainScene.label = "Load Scene Path";
             _propertyAdditiveScenes.label = "Additive Scenes Path";
@@ -82,7 +95,7 @@ namespace UnityEditor.SceneSystem
             InitElement();
 
             UpdateLoadStyle(_loadStyleProperty);
-            
+
             _root.schedule.Execute(() =>
             {
                 _propertyLoadStyle.RegisterValueChangeCallback(evt => UpdateLoadStyle(evt.changedProperty));
@@ -107,6 +120,16 @@ namespace UnityEditor.SceneSystem
                     _propertyAdditiveScenes.style.display = DisplayStyle.None;
                     _propertyUseAsync.style.display = DisplayStyle.None;
                     _propertySkipMode.style.display = DisplayStyle.Flex;
+
+                    if (_skipModeProperty.intValue == 1)
+                    {
+                        _propertySkipKey.style.display = DisplayStyle.Flex;
+                    }
+                    else
+                    {
+                        _propertySkipKey.style.display = DisplayStyle.None;
+                    }
+                    
                     _propertyMinimumLoadingTime.style.display = DisplayStyle.Flex;
                     _propertyEditorAutoLoad.style.display = DisplayStyle.None;
                     _propertyEvents.style.display = DisplayStyle.Flex;
