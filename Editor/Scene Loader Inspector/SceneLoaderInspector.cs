@@ -71,8 +71,8 @@ namespace UnityEditor.SceneSystem
             _skipKeyPropertyField.BindProperty(_skipKeyProperty);
 
 #if !USE_SCENE_REFERENCE
-            _propertyMainScene.label = "Load Scene Path";
-            _propertyAdditiveScenes.label = "Additive Scenes Path";
+            _mainScenePropertyField.label = "Load Scene Path";
+            _additiveScenesPropertyField.label = "Additive Scenes Path";
 #endif
             string editorAutoLoadTooltip = Application.systemLanguage == SystemLanguage.Korean
                 ? "자동으로 씬을 로드 하는지 여부를 트리거합니다. (Editor 전용)"

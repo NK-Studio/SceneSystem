@@ -1,4 +1,8 @@
 # Changelog
+## [1.0.4] - 2024-05-07
+# Fixed
+- Stability improvements.
+
 ## [1.0.3] - 2024-04-30
 # Fixed
 - Code fixes to improve stability and performance.

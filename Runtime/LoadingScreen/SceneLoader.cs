@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 #if ENABLE_INPUT_SYSTEM && SCENESYSTEM_SUPPORT_INPUTSYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -13,7 +12,6 @@ using UnityEditor.SceneManagement;
 
 namespace UnityEngine.SceneSystem
 {
-    [ExecuteInEditMode]
     [AddComponentMenu("Scene System/Scene Loader")]
     public class SceneLoader : MonoBehaviour
     {
@@ -98,6 +96,9 @@ namespace UnityEngine.SceneSystem
 
         private Action _onCompletedInternal;
 
+        /// <summary>
+        /// Called when the loading screen is completed.
+        /// </summary>
         public void AllowCompletion()
         {
             if (LoadStyle == LoadSceneMode.Single)
@@ -332,9 +333,15 @@ namespace UnityEngine.SceneSystem
                 if (DontUseAsync)
                 {
                     CallOnCompletedEvent();
-
+                    
+#if USE_SCENE_REFERENCE
                     if (!string.IsNullOrEmpty(loadScene.Path)) 
                         Scenes.LoadScene(loadScene);
+#else
+                    
+                    if (!string.IsNullOrEmpty(loadScene)) 
+                        Scenes.LoadScene(loadScene);
+#endif
                 }
                 else
                 {
